@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio de matrices | Tres en línea</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#17243c;background:#f3f6fb}*{box-sizing:border-box}body{margin:0}header{background:#152e57;color:white;padding:25px max(18px,calc((100vw - 1200px)/2))}header h1{margin:0;font-size:clamp(1.5rem,3vw,2.3rem)}header p{margin:8px 0 0;color:#c7d9f4}main{max-width:1200px;margin:auto;padding:22px;display:grid;grid-template-columns:minmax(290px,420px) minmax(350px,1fr);gap:20px}.panel{background:white;border:1px solid #dce3ee;border-radius:15px;padding:20px;box-shadow:0 5px 17px #1c3d6a0b}.eyebrow{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#4a68a1;font-weight:800}.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px auto;max-width:350px}.cell{aspect-ratio:1;border:2px solid #d6e2f2;border-radius:12px;background:#edf3fb;font-size:clamp(2rem,6vw,3.3rem);font-weight:850;cursor:pointer;color:#176bb9}.cell.o{color:#ee784c}.cell:hover:not(:disabled){background:#dceafd}.cell:disabled{cursor:default}.status{background:#f0f5fc;border-radius:10px;text-align:center;padding:13px;margin:10px 0;font-weight:700}.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}button.action{padding:10px 14px;border:0;border-radius:9px;background:#225fc5;color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#e9eff8;color:#21416f}button.action:hover{filter:brightness(.95)}.matrix{font-family:ui-monospace,Consolas,monospace;white-space:pre;overflow:auto;background:#17243c;color:#c9edff;padding:16px;border-radius:10px;line-height:1.65;font-size:1rem}.note{font-size:.87rem;color:#59687c}.task{border:1px solid #dce3ee;border-radius:12px;margin:14px 0;overflow:hidden}.task>summary{cursor:pointer;padding:14px 16px;background:#f7f9fd;font-weight:800}.task .inside{padding:14px}.task p{margin:0 0 9px;font-size:.93rem}textarea{display:block;width:100%;min-height:215px;resize:vertical;border:1px solid #bdcbde;border-radius:9px;background:#101d33;color:#ddf1ff;font:14px/1.55 Consolas,Monaco,monospace;padding:13px;tab-size:2}textarea:focus{outline:3px solid #9dc4ff}#winnerCode{min-height:300px}.certificate{margin-top:18px;padding:17px;border:2px solid #95b4ef;border-radius:12px;background:#f3f8ff}.certificate input{display:block;width:100%;padding:12px;border:1px solid #b4c6df;border-radius:8px;margin:9px 0 12px;font:inherit}#results{white-space:pre-wrap;font:13px/1.55 ui-monospace,Consolas,monospace;background:#f0f4fa;border-radius:9px;padding:12px;max-height:320px;overflow:auto}#results .result-summary{font-weight:800;font-size:1.05rem;margin-bottom:12px}#results .exercise-result{border:1px solid #d6e1ef;border-radius:10px;background:#fff;padding:12px;margin:10px 0}#results .exercise-result.passed{border-left:5px solid #16845a}#results .exercise-result.failed{border-left:5px solid #c44646}#results .exercise-heading{font-weight:800;font-size:.97rem;margin-bottom:5px}#results .exercise-count{font-size:.84rem;color:#53667f;margin-bottom:8px}#results .test-row{font:13px/1.55 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;padding:3px 0}#results .result-footer{font-weight:700;margin-top:12px}code{background:#e9f0fb;padding:2px 5px;border-radius:4px}ul{padding-left:21px}li{margin:6px 0}.pill{display:inline-block;background:#e6f0ff;border-radius:5px;padding:3px 7px;font-size:.8rem;color:#194b9b}footer{max-width:1200px;margin:0 auto 24px;padding:0 22px;color:#5b697d;font-size:.85rem}@media(max-width:800px){main{grid-template-columns:1fr;padding:12px}.panel{padding:15px}.board{max-width:320px}}
+</style>
+</head>
+<body>
+<header><h1>🎮 Laboratorio de matrices: Tres en línea</h1><p>Programación con JavaScript · Matriz de 3 × 3 · Completa la lógica y haz funcionar el juego</p></header>
+<main>
+<section>
+<div class="panel">
+<div class="eyebrow">Zona de juego</div>
+<h2>Jugador X vs. jugador O</h2>
+<div id="status" class="status" role="status" aria-live="polite">Turno del jugador X</div>
+<div id="board" class="board" aria-label="Tablero de tres en línea"></div>
+<div class="controls"><button class="action secondary" id="reset">↻ Reiniciar partida</button><button class="action secondary" id="showMatrix">Actualizar matriz</button></div>
+<h3>Estado de la matriz</h3>
+<pre id="matrix" class="matrix"></pre>
+<p class="note">Filas y columnas comienzan en 0. Cada celda contiene <code>"X"</code>, <code>"O"</code> o <code>""</code> (vacía).</p>
+</div>
+<div class="panel" style="margin-top:20px">
+<h3>Objetivos de aprendizaje</h3>
+<ul><li>Acceder a elementos usando <code>tablero[fila][columna]</code>.</li><li>Recorrer filas y columnas con <code>while</code> y contadores.</li><li>Comparar elementos con <code>if</code> y operadores lógicos.</li><li>Detectar victoria, empate y fin de partida.</li><li>Validar jugadas y contar casillas libres con <code>while</code>.</li></ul>
+<p class="note"><strong>Dinámica:</strong> escribe el código de los retos, presiona «Aplicar código» y luego juega. Usa «Probar soluciones» para verificar tus funciones con tableros de ejemplo.</p>
+</div>
+</section>
+<section class="panel">
+<div class="eyebrow">Editor de lógica</div><h2>Completa los cinco retos</h2>
+<p class="note">La interfaz y los turnos ya están programados. Tu trabajo es completar <strong>únicamente el cuerpo de las funciones</strong>. Debes usar la matriz <code>tablero</code> y bucles <code>while</code>. Las soluciones no están incluidas. Al aprobar todas las pruebas podrás generar tu certificado PNG.</p>
+<details class="task" open><summary>Reto 1 · Detectar una fila ganadora <span class="pill">Básico</span></summary><div class="inside"><p>Devuelve <code>true</code> si el jugador tiene tres símbolos iguales en alguna fila. En caso contrario, devuelve <code>false</code>.</p><textarea id="rowCode" spellcheck="false" aria-label="Código del reto filas">// Parámetros disponibles: tablero, jugador
+// tablero es una matriz de 3 x 3.
+// Ejemplo: tablero[0][2]
+
+let fila = 0;
+while (fila < 3) {
+  // TODO: comprueba las 3 columnas de esta fila.
+
+  fila++; // Avanzar a la siguiente fila
+}
+
+return false;</textarea></div></details>
+<details class="task" open><summary>Reto 2 · Detectar columnas y diagonales <span class="pill">Intermedio</span></summary><div class="inside"><p>Devuelve <code>true</code> si el jugador tiene tres símbolos en alguna columna o diagonal. No necesitas revisar las filas aquí. Utiliza un <code>while</code> para las columnas y condiciones <code>if</code> para las diagonales.</p><textarea id="otherCode" spellcheck="false" aria-label="Código del reto columnas y diagonales">// Parámetros disponibles: tablero, jugador
+
+let columna = 0;
+while (columna < 3) {
+  // TODO: comprueba las 3 filas de esta columna.
+
+  columna++; // Avanzar a la siguiente columna
+}
+
+// TODO: comprueba las dos diagonales.
+
+return false;</textarea></div></details>
+<details class="task" open><summary>Reto 3 · Detectar un empate <span class="pill">Intermedio</span></summary><div class="inside"><p>Devuelve <code>true</code> solamente si no queda ninguna celda vacía. El juego comprobará antes si alguien ganó.</p><textarea id="drawCode" spellcheck="false" aria-label="Código del reto empate">// Parámetro disponible: tablero
+
+let fila = 0;
+while (fila < 3) {
+  let columna = 0;
+  while (columna < 3) {
+    // TODO: si una celda está vacía, no hay empate.
+
+    columna++; // Siguiente columna
+  }
+  fila++; // Siguiente fila
+}
+
+// TODO: devuelve true si todas las celdas están ocupadas.
+return false;</textarea></div></details>
+<details class="task" open><summary>Reto 4 · Validar una jugada <span class="pill">Intermedio</span></summary><div class="inside"><p>Devuelve <code>true</code> si la fila y columna están dentro del tablero (de 0 a 2) y la celda está vacía. En cualquier otro caso, devuelve <code>false</code>. Usa <code>if</code>. No necesitas un bucle en este reto.</p><textarea id="validCode" spellcheck="false" aria-label="Código del reto validar jugada">// Parámetros: tablero, fila, columna
+// Si fila o columna está fuera de 0..2 devuelve false.
+// Si la celda ya está ocupada devuelve false.
+// TODO: completa las condiciones con if.
+
+return false;</textarea></div></details>
+<details class="task" open><summary>Reto 5 · Contar casillas vacías <span class="pill">Intermedio</span></summary><div class="inside"><p>Recorre toda la matriz usando dos bucles <code>while</code> y devuelve la cantidad de casillas vacías (un número de 0 a 9).</p><textarea id="countCode" spellcheck="false" aria-label="Código del reto contar casillas">// Parámetro: tablero
+let cantidad = 0;
+let fila = 0;
+while (fila < 3) {
+  let columna = 0;
+  while (columna < 3) {
+    // TODO: si tablero[fila][columna] está vacío,
+    // aumenta cantidad en 1.
+
+    columna++;
+  }
+  fila++;
+}
+return cantidad;</textarea></div></details>
+<div class="controls"><button class="action" id="apply">▶ Aplicar código y reiniciar</button><button class="action secondary" id="test">✓ Probar soluciones</button><button class="action secondary" id="restore">Restaurar plantillas</button></div>
+<div id="certificate" class="certificate" hidden>
+<h3>🏅 Certificado de logro desbloqueado</h3>
+<p class="note">Superaste todas las pruebas. Escribe tu nombre completo y descarga la imagen PNG para entregarla en Classroom.</p>
+<label for="studentName"><strong>Nombre completo del estudiante</strong></label>
+<input id="studentName" maxlength="90" autocomplete="name" placeholder="Nombres y apellidos" />
+<button class="action" id="downloadCertificate">⬇ Generar certificado PNG</button>
+<p class="note">El certificado confirma que el navegador superó las pruebas automáticas; el docente puede solicitar el código para comprobar la autoría.</p>
+</div>
+<h3>Resultados y mensajes por ejercicio</h3><div id="results" aria-live="polite">Completa los retos y aplica tu código. El juego funcionará sin detectar ganadores hasta que programes las condiciones.</div>
+<p class="note"><strong>Seguridad:</strong> este laboratorio ejecuta el JavaScript que escribas, localmente en tu navegador. Úsalo solo con código de la actividad. No pegues scripts desconocidos.</p>
+</section>
+</main>
+<footer>Práctica de aula · No necesita internet, librerías externas ni servidor · Guarda este archivo como .html y ábrelo en un navegador.</footer>
+<script>
+'use strict';
+const INITIAL = Object.fromEntries(['rowCode','otherCode','drawCode','validCode','countCode'].map(id=>[id,document.getElementById(id).value]));
+let tablero, jugador, terminado;
+let certificacionAprobada=false;
+let soluciones={filas:()=>false,otras:()=>false,empate:()=>false,valida:()=>true,contar:()=>9};
+const $=id=>document.getElementById(id);
+function nuevoJuego(){tablero=Array.from({length:3},()=>Array(3).fill(''));jugador='X';terminado=false;pintar();$('status').textContent='Turno del jugador X';}
+function pintar(){
+ $('board').replaceChildren();
+ for(let f=0;f<3;f++)for(let c=0;c<3;c++){
+  const b=document.createElement('button');b.type='button';b.className='cell'+(tablero[f][c]==='O'?' o':'');b.textContent=tablero[f][c];b.setAttribute('aria-label',`Fila ${f}, columna ${c}: ${tablero[f][c]||'vacía'}`);b.disabled=terminado||tablero[f][c]!=='';b.addEventListener('click',()=>jugar(f,c));$('board').appendChild(b);
+ }
+ $('matrix').textContent='[\n'+tablero.map(f=>'  '+JSON.stringify(f)).join(',\n')+'\n]';
+}
+function jugar(f,c){if(terminado)return;
+ try{
+  if(!soluciones.valida(tablero,f,c)){$('results').textContent='Jugada rechazada por tu función de validación. Revisa el reto 4.';return;}
+  tablero[f][c]=jugador;
+  if(soluciones.filas(tablero,jugador)||soluciones.otras(tablero,jugador)){
+   terminado=true;$('status').textContent=`🏆 Ganó el jugador ${jugador}`;
+  }else if(soluciones.empate(tablero)){
+   terminado=true;$('status').textContent='🤝 Empate: tablero completo';
+  }else{
+   jugador=jugador==='X'?'O':'X';$('status').textContent=`Turno del jugador ${jugador}`;
+  }
+ }catch(e){terminado=true;$('status').textContent='Error en tu código. Corrígelo y vuelve a aplicar.';$('results').textContent='Error al jugar: '+e.message;}
+ pintar();
+}
+function compilar(id,nombres){const fuente=$(id).value;return new Function(...nombres,'"use strict";\n'+fuente);}
+function aplicar(){
+ invalidarCertificado();
+ try{
+  const nuevas={filas:compilar('rowCode',['tablero','jugador']),otras:compilar('otherCode',['tablero','jugador']),empate:compilar('drawCode',['tablero']),valida:compilar('validCode',['tablero','fila','columna']),contar:compilar('countCode',['tablero'])};
+  // Compilar todas antes de cambiar la versión activa.
+  soluciones=nuevas;nuevoJuego();$('results').textContent='✅ Código aplicado. Juega o presiona «Probar soluciones». La compilación no significa que la lógica esté correcta.';
+ }catch(e){$('results').textContent='❌ Error de sintaxis: '+e.message;}
+}
+const cases=[
+ ['Filas: X gana arriba','filas',[['X','X','X'],['O','',''],['','O','']],'X',true],
+ ['Filas: O gana en medio','filas',[['X','',''],['O','O','O'],['X','','']],'O',true],
+ ['Filas: no hay victoria','filas',[['X','O','X'],['O','X','O'],['O','X','O']],'X',false],
+ ['Columnas: X gana en la primera','otras',[['X','O',''],['X','O',''],['X','','']],'X',true],
+ ['Columnas: O gana en la última','otras',[['X','','O'],['X','','O'],['','X','O']],'O',true],
+ ['Diagonal principal','otras',[['X','O',''],['O','X',''],['','','X']],'X',true],
+ ['Diagonal secundaria','otras',[['','','O'],['X','O',''],['O','X','X']],'O',true],
+ ['Sin columnas ni diagonales ganadoras','otras',[['X','X','X'],['O','',''],['','O','']],'X',false],
+ ['Empate: tablero completo','empate',[['X','O','X'],['X','O','O'],['O','X','X']],null,true],
+ ['No hay empate: queda un espacio','empate',[['X','O','X'],['X','','O'],['O','X','X']],null,false],
+ ['No hay empate: tablero vacío','empate',[['','',''],['','',''],['','','']],null,false],
+ ['Jugada válida: casilla vacía','valida',[['X','',''],['','O',''],['','','']],null,true,0,1],
+ ['Jugada inválida: casilla ocupada','valida',[['X','',''],['','O',''],['','','']],null,false,0,0],
+ ['Jugada inválida: fila fuera de rango','valida',[['','',''],['','',''],['','','']],null,false,3,0],
+ ['Jugada inválida: columna negativa','valida',[['','',''],['','',''],['','','']],null,false,1,-1],
+ ['Contar: 9 casillas libres','contar',[['','',''],['','',''],['','','']],null,9],
+ ['Contar: 5 casillas libres','contar',[['X','O',''],['','X','O'],['','','']],null,5],
+ ['Contar: 0 casillas libres','contar',[['X','O','X'],['O','X','O'],['X','O','X']],null,0]
+];
+const RETOS=[
+ {tipo:'filas',numero:1,titulo:'Detectar una fila ganadora',editor:'rowCode',args:['tablero','jugador']},
+ {tipo:'otras',numero:2,titulo:'Detectar columnas y diagonales',editor:'otherCode',args:['tablero','jugador']},
+ {tipo:'empate',numero:3,titulo:'Detectar un empate',editor:'drawCode',args:['tablero']},
+ {tipo:'valida',numero:4,titulo:'Validar una jugada',editor:'validCode',args:['tablero','fila','columna']},
+ {tipo:'contar',numero:5,titulo:'Contar casillas vacías',editor:'countCode',args:['tablero']}
+];
+function probar(){
+ invalidarCertificado();
+ const resultados=$('results');resultados.replaceChildren();
+ let totalCorrectas=0, ejerciciosCorrectos=0;
+ const resumen=document.createElement('div');resumen.className='result-summary';resultados.appendChild(resumen);
+ for(const reto of RETOS){
+  const pruebas=cases.filter(c=>c[1]===reto.tipo);
+  let correctas=0, funcion=null, errorCompilacion=null;
+  try{funcion=compilar(reto.editor,reto.args);}catch(e){errorCompilacion=e.message;}
+  const filas=[];
+  if(errorCompilacion){filas.push('❌ Error de sintaxis en el ejercicio '+reto.numero+': '+errorCompilacion);}
+  else for(const [nombre,tipo,matriz,jugadorEsperado,esperado,fila,columna] of pruebas){
+   try{
+    const copia=matriz.map(f=>f.slice());
+    const recibido=tipo==='valida'?funcion(copia,fila,columna):(['empate','contar'].includes(tipo)?funcion(copia):funcion(copia,jugadorEsperado));
+    const bien=recibido===esperado;
+    if(bien)correctas++;
+    filas.push((bien?'✅':'❌')+' '+nombre+' — Esperado: '+esperado+'; obtenido: '+String(recibido));
+   }catch(e){filas.push('❌ '+nombre+' — Error: '+e.message);}
+  }
+  totalCorrectas+=correctas;
+  const aprobado=correctas===pruebas.length;
+  if(aprobado)ejerciciosCorrectos++;
+  const grupo=document.createElement('section');grupo.className='exercise-result '+(aprobado?'passed':'failed');
+  const titulo=document.createElement('div');titulo.className='exercise-heading';titulo.textContent=(aprobado?'✅ CORRECTO':'❌ POR CORREGIR')+' — Ejercicio '+reto.numero+': '+reto.titulo;
+  const contador=document.createElement('div');contador.className='exercise-count';contador.textContent=correctas+' de '+pruebas.length+' pruebas aprobadas';
+  grupo.append(titulo,contador);
+  for(const detalle of filas){const item=document.createElement('div');item.className='test-row';item.textContent=detalle;grupo.appendChild(item);}
+  resultados.appendChild(grupo);
+ }
+ resumen.textContent='Resultados: '+ejerciciosCorrectos+'/5 ejercicios correctos · '+totalCorrectas+'/'+cases.length+' pruebas aprobadas';
+ const pie=document.createElement('div');pie.className='result-footer';
+ pie.textContent=totalCorrectas===cases.length?'🎉 ¡Excelente! Completaste los cinco ejercicios. Ya puedes generar tu certificado.':'Revisa los ejercicios marcados «POR CORREGIR» y vuelve a probar tus soluciones.';
+ resultados.appendChild(pie);
+ certificacionAprobada=totalCorrectas===cases.length;
+ $('certificate').hidden=!certificacionAprobada;
+}
+$('reset').addEventListener('click',nuevoJuego);
+$('showMatrix').addEventListener('click',pintar);
+$('apply').addEventListener('click',aplicar);
+$('test').addEventListener('click',probar);
+$('restore').addEventListener('click',()=>{if(confirm('¿Restaurar los cinco editores? Perderás el código escrito.')){invalidarCertificado();for(const [id,value] of Object.entries(INITIAL))$(id).value=value;soluciones={filas:()=>false,otras:()=>false,empate:()=>false,valida:()=>true,contar:()=>9};nuevoJuego();$('results').textContent='Plantillas restauradas.';}});
+function invalidarCertificado(){certificacionAprobada=false;$('certificate').hidden=true;}
+for(const id of Object.keys(INITIAL))$(id).addEventListener('input',invalidarCertificado);
+function generarCertificado(){
+ if(!certificacionAprobada){alert('Primero debes aprobar todas las pruebas.');return;}
+ const nombre=$('studentName').value.trim().replace(/\s+/g,' ');
+ if(nombre.length<5){alert('Escribe tus nombres y apellidos completos.');$('studentName').focus();return;}
+ const canvas=document.createElement('canvas');canvas.width=1400;canvas.height=900;
+ const ctx=canvas.getContext('2d');
+ ctx.fillStyle='#f8fbff';ctx.fillRect(0,0,1400,900);
+ ctx.fillStyle='#15335e';ctx.fillRect(0,0,1400,125);
+ ctx.fillStyle='#d5aa4d';ctx.fillRect(34,34,1332,832);ctx.fillStyle='#f8fbff';ctx.fillRect(44,44,1312,812);
+ ctx.fillStyle='#15335e';ctx.fillRect(44,44,1312,81);
+ ctx.textAlign='center';ctx.fillStyle='#ffffff';ctx.font='bold 34px Arial';ctx.fillText('LABORATORIO DE PROGRAMACIÓN',700,96);
+ ctx.fillStyle='#15335e';ctx.font='bold 61px Georgia,serif';ctx.fillText('CERTIFICADO DE LOGRO',700,240);
+ ctx.font='29px Arial';ctx.fillText('Se reconoce a',700,322);
+ let tam=62;do{ctx.font=`bold ${tam}px Georgia,serif`;tam-=2;}while(ctx.measureText(nombre).width>1160&&tam>25);
+ ctx.fillStyle='#1f63b3';ctx.fillText(nombre,700,425);
+ ctx.fillStyle='#15335e';ctx.font='28px Arial';ctx.fillText('por completar satisfactoriamente los cinco retos de',700,502);
+ ctx.font='bold 33px Arial';ctx.fillText('MATRICES · TRES EN LÍNEA · JAVASCRIPT',700,561);
+ ctx.font='26px Arial';ctx.fillText('Bucles while · Condicionales if · Filas · Columnas · Diagonales',700,626);
+ ctx.fillStyle='#17634f';ctx.font='bold 32px Arial';ctx.fillText(`${cases.length} de ${cases.length} pruebas automáticas aprobadas`,700,699);
+ ctx.fillStyle='#47566c';ctx.font='23px Arial';ctx.fillText('Fecha: '+new Date().toLocaleDateString('es-BO',{year:'numeric',month:'long',day:'numeric'}),700,758);
+ ctx.font='18px Arial';ctx.fillText('Constancia generada localmente por la práctica; su autoría debe ser verificada por el docente.',700,826);
+ const a=document.createElement('a');a.download='certificado_matrices_'+nombre.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'_').slice(0,65)+'.png';a.href=canvas.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove();
+}
+$('downloadCertificate').addEventListener('click',generarCertificado);
+nuevoJuego();
+</script>
+</body></html>
